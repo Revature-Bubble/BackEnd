@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,6 +40,8 @@ import com.revature.services.ProfileServiceImpl;
 * @author John Boyle
 * @batch: 211129-Enterprise
 *
+* @edit David Guijosa
+* @batch: 220118-UTA-JAVA-GCP-EM
 */
 @RestController
 @CrossOrigin
@@ -95,6 +98,25 @@ public class GroupController {
 		GroupDTO groupDto = new GroupDTO(groupService.save(group.toGroup()));
 		return ResponseEntity.ok(groupDto);
 	}
+
+	/**
+	 * @autor Zent
+     * Put mapping grabs the updated fields of group and updates the profile in
+     * the database.
+     * 
+     * @param group
+     * @return Updated group with HttpStatus.ACCEPTED otherwise if invalid returns HttpStatus.BAD_REQUEST
+	 * 
+     */
+	@PutMapping
+    public ResponseEntity<Group> updateGroup(@RequestBody GroupDTO group) {
+        Group result = groupService.updateGroup(group.toGroup());
+        if (result != null) {
+            return ResponseEntity.ok(result);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 	
 	/**
 	 * @author robot

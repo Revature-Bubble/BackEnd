@@ -4,14 +4,7 @@ import java.sql.Timestamp;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.revature.utilites.SecurityUtil;
 
@@ -30,7 +23,8 @@ public class Post {
 
 	@ManyToOne
 	@JoinColumn(name = "profile_id", nullable = false)
-	private Profile creator;
+	private Profile creator; //*<- to note: please use the proper name of the column to create new
+	// methods in the repo. The repo will flip out on you if you don't.
 
 	@Column(name = "body")
 	private String body;
@@ -45,7 +39,15 @@ public class Post {
 	@Column(name = "profile_id")
 	@ElementCollection()
 	private Set<Integer> likes = new LinkedHashSet<>();
-	
+
+	//new bookmarks table to identify bookmarks by post_id (post that was bookmarked) and the
+	// profile_id (user/profile that bookmarked the post) ~ Modeled after likes table.
+
+	@CollectionTable(name = "bookmarks", joinColumns = @JoinColumn(name = "post_id", referencedColumnName = "post_id"))
+	@Column(name = "profile_id")
+	@ElementCollection()
+	private Set<Integer> bookmarks = new LinkedHashSet<>(); //Don't forget to swing by the Post DTO if you update the model and declare this.
+
 	@ManyToOne
 	private Group group;
 
@@ -64,8 +66,8 @@ public class Post {
 		this.group = group;
 	}
 
-	public Post(Profile creator, String body, String imgURL, Timestamp datePosted, Set<Integer> likes, Group group) {
-		this();
+	public Post(int psid, Profile creator, String body, String imgURL, Timestamp datePosted, Set<Integer> likes, Group group) {
+		this.psid = psid;
 		this.creator = creator;
 		this.body = body;
 		this.imgURL = imgURL;

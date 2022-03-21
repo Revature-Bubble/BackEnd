@@ -10,10 +10,18 @@ public interface PostService {
 
     List<Post> getAllPostsPaginated(int pageNumber);
     List<Post> getAllPosts();
-
+    Post getPostByPsid(Integer psid);
 
     Profile likePost(Profile profile, Post post);
     int likeDelete(Profile profile, Post post);
     int likeGet(Post post);
     Profile likeFindByID(Profile profile, Post post);
+
+    //Bookmark Methods
+    Profile bookmarkPost(Profile profile, Post post);
+    int bookmarkDelete(Profile profile, Post post);
+    int bookmarkGet(Post post);
+    Profile bookmarkFindByID(Profile profile, Post post);
+
+    List<Post> allBookMarksByCreator(Profile profile);
 }
